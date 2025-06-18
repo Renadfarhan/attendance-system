@@ -24,15 +24,14 @@
       z-index: 1;
     }
 
-    .video-container video {
+    .video-container iframe {
       width: 100%;
       height: 100%;
-      object-fit: cover;
-      display: block;
+      border: none;
     }
 
     .form-screen {
-      display: flex; 
+      display: none;
       position: fixed;
       top: 0;
       left: 0;
@@ -92,12 +91,11 @@
 </head>
 <body>
 
-  <!-- Fullscreen Video -->
+  <!-- Fullscreen Google Drive Video -->
   <div class="video-container" id="videoContainer">
-    <video id="introVideo" autoplay muted playsinline>
-      <source src="{% static 'videos/welcome.mp4' %}" type="video/mp4">
-      Your browser does not support the video tag.
-    </video>
+    <iframe src="https://drive.google.com/file/d/1fWq0zo3i28yAsObPTB7O-7fq7ynE6gkh/preview?autoplay=1"
+            allow="autoplay"
+            allowfullscreen></iframe>
   </div>
 
   <!-- Green Screen with Form -->
@@ -111,33 +109,25 @@
         <div class="timestamp" id="timestamp">Time: --:--</div>
         <button type="submit">Submit</button>
       </form>
-      
     </div>
   </div>
 
-  <!-- JavaScript -->
+  <!-- JavaScript to hide video and show form -->
   <script>
-    const video = document.getElementById('introVideo');
-const videoContainer = document.getElementById('videoContainer');
-const formScreen = document.getElementById('attendanceScreen');
-const timeSpan = document.getElementById('timestamp');
-const timeInput = document.getElementById('timestamp_input');  // hidden input
+    window.onload = function () {
+      setTimeout(() => {
+        document.getElementById('videoContainer').style.display = 'none';
+        document.getElementById('attendanceScreen').style.display = 'flex';
 
-video.addEventListener('ended', () => {
-  videoContainer.style.display = 'none';
-  formScreen.style.display = 'flex';
+        const now = new Date();
+        const hours = now.getHours().toString().padStart(2, '0');
+        const minutes = now.getMinutes().toString().padStart(2, '0');
+        const fullTime = `${hours}:${minutes}`;
 
-  const now = new Date();
-  const hours = now.getHours().toString().padStart(2, '0');
-  const minutes = now.getMinutes().toString().padStart(2, '0');
-  const fullTime = `${hours}:${minutes}`;
-
-  // Show on screen
-  timeSpan.textContent = `Time: ${fullTime}`;
-  // Set hidden input value
-  timeInput.value = fullTime;
-});
-
+        document.getElementById("timestamp").textContent = `Time: ${fullTime}`;
+        document.getElementById("timestamp_input").value = fullTime;
+      }, 6000); // 6 ثواني
+    };
   </script>
 
 </body>
